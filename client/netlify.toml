@@ -7,6 +7,5 @@ from = "/*"
 to = "/index.html"
 status = 200
 
-[env]
-  [env.production]
-    define = { VITE_API_URL = "https://your-backend-url/api" }
+[context.production.environment]
+VITE_API_URL = "http://localhost:5000/api"
