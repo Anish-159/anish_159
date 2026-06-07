@@ -57,3 +57,32 @@ GitHub + Deploy
 - Connect your frontend (`client`) to Vercel by importing the GitHub repo and setting `VITE_API_URL` to `https://your-backend-url/api`.
 - Connect your backend to Render by creating a new Web Service and either using `render.yaml` or setting the build/start commands to `npm install` and `npm start`. Add environment variables in Render for `MONGODB_URI`, `JWT_SECRET`, and `PRODUCTION_CLIENT_URL`.
 
+Render (Backend) — Exact Steps
+
+1. Create a Web Service in Render and connect your GitHub repo `Anish-159/anish_159`.
+2. Fill service details:
+	- **Name:** `korean-ai-academy-backend` (or any unique name)
+	- **Environment:** `Production`
+	- **Branch:** `main`
+	- **Region:** `Oregon`
+	- **Root Directory:** `server`
+	- **Build Command:** `npm install`
+	- **Start Command:** `npm start`
+	- **Instance Type:** `Free` (or choose paid if you need always-on)
+3. In Render → Service → Environment, add these environment variables (do NOT commit secrets):
+	- `MONGODB_URI` = mongodb+srv://<DB_USER>:<URL_ENCODED_PASSWORD>@<CLUSTER_HOST>/<DB_NAME>?retryWrites=true&w=majority
+	- `JWT_SECRET` = <your long random secret>
+	- `CLIENT_URL` = http://localhost:5173
+	- `PRODUCTION_CLIENT_URL` = https://learnzkorean.netlify.app
+	- (optional) `PORT` = 5000
+4. In MongoDB Atlas → Network Access, whitelist Render outbound IPs or (for quick testing) add `0.0.0.0/0` temporarily.
+5. Trigger a deploy (Manual Deploy in Render or push to `main`). Watch logs for a successful DB connection and server start.
+
+Troubleshooting
+- If you see `connect ECONNREFUSED 127.0.0.1:27017` — Render didn't receive `MONGODB_URI`. Add it in Environment and redeploy.
+- If you see DNS errors like `ENOTFOUND _mongodb._tcp.cluster0.mongodb.net` — check that your cluster host is correct and Atlas is reachable from Render (whitelist IPs).
+
+Local helper
+- A non-secret `server/.env.example` is included. Copy it to `server/.env` locally and set real values when running the server locally.
+
+
